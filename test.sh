@@ -137,10 +137,10 @@ speed_test() {
 	local speedtest=$(wget -4O /dev/null -T300 $1 2>&1 | awk '/\/dev\/null/ {speed=$3 $4} END {gsub(/\(|\)/,"",speed); print speed}')
 	local ipaddress=$(ping -c1 -n `awk -F'/' '{print $3}' <<< $1` | awk -F'[()]' '{print $2;exit}')
 	local nodeName=$2
-	printf "${YELLOW}%-32s${GREEN}%-24s${RED}%-14s${PLAIN}\n" "${nodeName}" "${ipaddress}" "${speedtest}"
+	printf "${YELLOW}%-32s${GREEN}%-24s${RED}%-14s${PLAIN}\n" "${nodeName}:" "${ipaddress}:" "${speedtest}"
 }
 speed() {
-	printf "%-32s%-24s%-14s\n" "Node Name" "IPv4 address" "Download Speed"
+	printf "%-32s%-24s%-14s\n" "Node Name:" "IPv4 address:" "Download Speed"
 #    speed_test 'http://cachefly.cachefly.net/100mb.test' 'CacheFly'
 	speed_test 'http://speedtest.tokyo.linode.com/100MB-tokyo.bin' 'Linode, Tokyo, JP'
 	speed_test 'http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin' 'Linode, Tokyo2, JP'
@@ -190,13 +190,13 @@ speed_test_cli(){
 mtrgo(){
 	mtrurl=$1
 	nodename=$2
-	echo "===== 测试 [$nodename] 到这台服务器的路由 =====" | tee -a $logfile
+	echo "===== 测试 [$nodename] 到此服务器的去程路由 =====" | tee -a $logfile
 	mtrgostr=$(curl -s "$mtrurl")
 	echo -e "$mtrgostr" > mtrlog.log
 	mtrgostrback=$(curl -s -d @mtrlog.log "http://test.91yun.org/traceroute.php")
 	rm -rf mtrlog.log
 	echo -e $mtrgostrback | awk -F '^' '{printf("%-2s\t%-16s\t%-35s\t%-30s\t%-25s\n",$1,$2,$3,$4,$5)}' | tee -a $logfile
-	echo -e "===== [$nodename] 路由测试结束 =====" | tee -a $logfile	
+	echo -e "===== [$nodename] 去程路由测试结束 =====" | tee -a $logfile	
 }
 mtrback(){
 	echo "===== 测试 [$2] 的回程路由 =====" | tee -a $logfile
@@ -237,11 +237,11 @@ benchtest(){
 	tar -xzf UnixBench5.1.3.tgz
 	cd UnixBench/
 	make
-	echo "===== 开始测试bench =====" | tee -a ../${logfilename}
+	echo "===== 开始测试CPU性能測試 =====" | tee -a ../${logfilename}
 	./Run
 	benchfile=$(ls results/ | grep -v '\.')
 	cat results/${benchfile} >> ../${logfilename}
-	echo "===== bench测试结束 =====" | tee -a ../${logfilename}	
+	echo "===== CPU性能测试结束 =====" | tee -a ../${logfilename}	
 	cd ..
 	rm -rf UnixBench5.1.3.tgz UnixBench
 	next | tee -a $logfile
@@ -258,7 +258,7 @@ go(){
 	tracetest
 	backtracetest
 	[[ ${action} == "a" ]] && benchtest
-	echo "脚本执行完毕！日志文件: ${logfile}"
+	echo "測試脚本执行完毕！日志文件: ${logfile}"
 }
 action=$1
 go
