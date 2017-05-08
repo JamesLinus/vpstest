@@ -4,8 +4,9 @@ export PATH
 # Description: Auto test download & I/O speed script
 # Copyright (C) 2015 - 2016 Teddysun <i@teddysun.com>
 # Thanks: LookBack <admin@dwhd.org>
-# URL: https://teddysun.com/444.html
-# Toyo
+# Teddysun: https://teddysun.com/444.html
+# Toyo: https://doub.io
+# For https://VPS.BEST
 
 RED='\033[0;31m' && GREEN='\033[0;32m' && YELLOW='\033[0;33m' && PLAIN='\033[0m'
 next() { printf "%-70s\n" "-" | sed 's/\s/-/g'; }
