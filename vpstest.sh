@@ -122,15 +122,29 @@ io_test(){
 	echo "I/O speed(2nd run)   : $io2" | tee -a $logfile
 	io3=$( $1 )
 	echo "I/O speed(3rd run)   : $io3" | tee -a $logfile
-	ioraw1=$( echo $io1 | awk 'NR==1 {print $1}' )
-	[[ "$(echo $io1 | awk 'NR==1 {print $2}')" == "GB/s" ]] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
-	ioraw2=$( echo $io2 | awk 'NR==1 {print $1}' )
-	[[ "$(echo $io2 | awk 'NR==1 {print $2}')" == "GB/s" ]] && ioraw2=$( awk 'BEGIN{print '$ioraw2' * 1024}' )
-	ioraw3=$( echo $io3 | awk 'NR==1 {print $1}' )
-	[[ "$(echo $io3 | awk 'NR==1 {print $2}')" == "GB/s" ]] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
+	ioraw1=$( echo "$io1" | awk 'NR==1 {print $1}' )
+	[[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "GB/s" ]] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
+	ioraw2=$( echo "$io2" | awk 'NR==1 {print $1}' )
+	[[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "GB/s" ]] && ioraw2=$( awk 'BEGIN{print '$ioraw2' * 1024}' )
+	ioraw3=$( echo "$io3" | awk 'NR==1 {print $1}' )
+	[[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "GB/s" ]] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
+	unit="$(echo "$io1" | awk 'NR==1 {print $2}')"
+	if [[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "kB/s" ]]; then
+		unit="kB/s"
+		[[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw2=$( awk 'BEGIN{print '$ioraw2' * 1024}' )
+		[[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
+	elif [[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "kB/s" ]]; then
+		unit="kB/s"
+		[[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
+		[[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
+	elif [[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "kB/s" ]]; then
+		unit="kB/s"
+		[[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
+		[[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw2=$( awk 'BEGIN{print '$ioraw2' * 1024}' )
+	fi
 	ioall=$( awk 'BEGIN{print '$ioraw1' + '$ioraw2' + '$ioraw3'}' )
 	ioavg=$( awk 'BEGIN{printf "%.1f", '$ioall' / 3}' )
-	echo "Average I/O speed    : $ioavg MB/s" | tee -a $logfile
+	echo "Average I/O speed    : $ioavg ${unit}" | tee -a $logfile
 	next | tee -a $logfile
 }
 speed_test() {
