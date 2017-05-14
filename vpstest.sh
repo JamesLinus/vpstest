@@ -113,7 +113,7 @@ io_test_1() {
 	(LANG=C dd if=/dev/zero of=test_$$ bs=64k count=4k oflag=dsync && rm -f test_$$ ) 2>&1 | awk -F, '{io=$NF} END { print io}' | sed 's/^[ \t]*//;s/[ \t]*$//'
 }
 io_test_2() {
-	(LANG=C dd if=/dev/zero of=test_$$ bs=8 count=256 conv=fdatasync && rm -f test_$$ ) 2>&1 | awk -F, '{io=$NF} END { print io}' | sed 's/^[ \t]*//;s/[ \t]*$//'
+	(LANG=C dd if=/dev/zero of=test_$$ bs=8k count=256k conv=fdatasync && rm -f test_$$ ) 2>&1 | awk -F, '{io=$NF} END { print io}' | sed 's/^[ \t]*//;s/[ \t]*$//'
 }
 io_test(){
 	io1=$( $1 )
