@@ -188,8 +188,6 @@ speed() {
 	speed_test 'http://111.202.98.38/dl.softmgr.qq.com/original/game/DuiZhanSetup1_8_4_2042_win10.exe' 'ChinaUnicom, Beijing, CN'
 	speed_test 'http://223.82.245.41/dl.softmgr.qq.com/original/game/DuiZhanSetup1_8_4_2042_win10.exe' 'ChinaMobile, Jiangxi, CN'
 	speed_test 'http://61.233.79.5/setup.exe' 'ChinaTieTong, Henan, CN'
-	speed_test 'http://101.4.60.106/setup.exe' 'CERNET, Beijing, CN'
-	speed_test 'http://mirrors.opencas.org/apache/ode/apache-ode-war-1.3.6.zip' 'CSTNET, Beijing, CN'
 	speed_test 'http://tpdb.speed2.hinet.net/test_100m.zip' 'Hinet, Taiwan, TW'
 	next | tee -a $logfile
 }
