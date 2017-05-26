@@ -34,13 +34,13 @@ check_sys(){
 }
 Installation_dependency(){
 	if [[ ${release} == "centos" ]]; then
-		yum update
+		yum update -y
 		yum install mtr curl time virt-what -y
 		[[ ${action} == "a" ]] && yum install make gcc gcc-c++ gdbautomake autoconf -y
 		curl -s --max-time 10 -o ioping.static http://wget.racing/ioping.static
 		chmod +x ioping.static
 	else
-		apt-get update
+		apt-get update && apt-get upgrade -y
 		apt-get install curl mtr time virt-what -y
 		[[ ${action} == "a" ]] && apt-get install make gcc gdb automake autoconf -y
 		curl -s --max-time 10 -o ioping.static http://wget.racing/ioping.static
