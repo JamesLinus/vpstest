@@ -159,7 +159,7 @@ speed_test() {
 }
 speed() {
 	printf "%-32s%-24s%-14s\n" "Node Name:" "IPv4 address:" "Download Speed"
-#    speed_test 'http://cachefly.cachefly.net/100mb.test' 'CacheFly'
+        speed_test 'http://cachefly.cachefly.net/100mb.test' 'CacheFly'
 	speed_test 'http://speedtest.tokyo.linode.com/100MB-tokyo.bin' 'Linode, Tokyo, JP'
 	speed_test 'http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin' 'Linode, Tokyo2, JP'
 	speed_test 'http://speedtest.singapore.linode.com/100MB-singapore.bin' 'Linode, Singapore, SG'
