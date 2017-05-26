@@ -193,7 +193,7 @@ speed() {
 	speed_test 'http://223.82.245.41/dl.softmgr.qq.com/original/game/DuiZhanSetup1_8_4_2042_win10.exe' 'ChinaMobile, Jiangxi, CN'
 	speed_test 'http://61.233.79.5/setup.exe' 'ChinaTieTong, Henan, CN'
 	speed_test 'http://tpdb.speed2.hinet.net/test_100m.zip' 'Hinet, Taiwan, TW'
-	next | tee -a $logfile
+	next
 }
 speed_test_cli(){
 	echo "===== 开始speedtest =====" | tee -a $logfile
@@ -270,7 +270,7 @@ go(){
 	io_test "io_test_1"
 	io_test "io_test_2"
 	speed_test_cli
-	speed
+	speed | tee -a $logfile
 	tracetest
 	backtracetest
 	[[ ${action} == "a" ]] && benchtest
