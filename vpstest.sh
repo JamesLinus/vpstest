@@ -2,10 +2,9 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 # Description: Auto test download & I/O speed script
-# Copyright (C) 2015 - 2016 Teddysun <i@teddysun.com>
-# Thanks: LookBack <admin@dwhd.org>
-# Teddysun: https://teddysun.com/444.html
+# Thanks: LookBack <admin@dwhd.org>; Nils Steinger; Teddysun
 # Toyo: https://doub.io
+# H2YTech: https://minecloud.asia
 # For https://VPS.BEST
 
 RED='\033[0;31m' && GREEN='\033[0;32m' && YELLOW='\033[0;33m' && PLAIN='\033[0m'
@@ -36,12 +35,16 @@ check_sys(){
 Installation_dependency(){
 	if [[ ${release} == "centos" ]]; then
 		yum update
-		yum -y install mtr curl time virt-what
-		[[ ${action} == "a" ]] && yum -y install make gcc gcc-c++ gdbautomake autoconf
+		yum install mtr curl time virt-what -y
+		[[ ${action} == "a" ]] && yum install make gcc gcc-c++ gdbautomake autoconf -y
+		curl -s --max-time 10 -o ioping.static http://wget.racing/ioping.static
+		chmod +x ioping.static
 	else
 		apt-get update
-		apt-get -y install curl mtr time virt-what
-		[[ ${action} == "a" ]] && apt-get -y install make gcc gdb automake autoconf
+		apt-get install curl mtr time virt-what -y
+		[[ ${action} == "a" ]] && apt-get install make gcc gdb automake autoconf -y
+		curl -s --max-time 10 -o ioping.static http://wget.racing/ioping.static
+		chmod +x ioping.static
 	fi
 }
 get_info(){
@@ -95,6 +98,10 @@ system_info(){
 	echo "ipaddr               : $IPaddr" | tee -a $logfilename
 	echo "vm                   : $vm" | tee -a $logfilename
 	next | tee -a $logfile
+}
+ioping {
+        echo "ioping: seek rate\n" ./ioping.static -R -w 5 . | tail -n 1 | tee -a $logfile
+        echo "ioping: sequential speed\n" ./ioping.static -RL -w 5 . | tail -n 2 | head -n 1 | tee -a $logfile
 }
 calc_disk() {
 	local total_size=0
@@ -267,6 +274,7 @@ go(){
 	Installation_dependency
 	get_info
 	system_info
+	ioping
 	io_test "io_test_1"
 	io_test "io_test_2"
 	speed_test_cli
