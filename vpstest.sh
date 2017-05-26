@@ -99,11 +99,12 @@ system_info(){
 	echo "vm                   : $vm" | tee -a $logfilename
 	next | tee -a $logfile
 }
-ioping {
+ioping() {
         printf 'ioping: seek rate\n    ' | tee -a $logfile
         ./ioping.static -R -w 5 . | tail -n 1 | tee -a $logfile
         printf 'ioping: sequential speed\n    ' | tee -a $logfile
         ./ioping.static -RL -w 5 . | tail -n 2 | head -n 1 | tee -a $logfile
+	next | tee -a $logfile
 }
 calc_disk() {
 	local total_size=0
