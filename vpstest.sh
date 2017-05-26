@@ -129,18 +129,22 @@ io_test(){
 	ioraw3=$( echo "$io3" | awk 'NR==1 {print $1}' )
 	[[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "GB/s" ]] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
 	unit="$(echo "$io1" | awk 'NR==1 {print $2}')"
-	if [[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "kB/s" ]]; then
-		unit="kB/s"
-		[[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw2=$( awk 'BEGIN{print '$ioraw2' * 1024}' )
-		[[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
-	elif [[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "kB/s" ]]; then
-		unit="kB/s"
-		[[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
-		[[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
-	elif [[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "kB/s" ]]; then
-		unit="kB/s"
-		[[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
-		[[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw2=$( awk 'BEGIN{print '$ioraw2' * 1024}' )
+	if [[ "${unit}" == "GB/s" ]]; then
+		unit="MB/s"
+	else
+		if [[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "kB/s" ]]; then
+			unit="kB/s"
+			[[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw2=$( awk 'BEGIN{print '$ioraw2' * 1024}' )
+			[[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
+		elif [[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "kB/s" ]]; then
+			unit="kB/s"
+			[[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
+			[[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw3=$( awk 'BEGIN{print '$ioraw3' * 1024}' )
+		elif [[ "$(echo "$io3" | awk 'NR==1 {print $2}')" == "kB/s" ]]; then
+			unit="kB/s"
+			[[ "$(echo "$io1" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw1=$( awk 'BEGIN{print '$ioraw1' * 1024}' )
+			[[ "$(echo "$io2" | awk 'NR==1 {print $2}')" == "MB/s" ]] && ioraw2=$( awk 'BEGIN{print '$ioraw2' * 1024}' )
+		fi
 	fi
 	ioall=$( awk 'BEGIN{print '$ioraw1' + '$ioraw2' + '$ioraw3'}' )
 	ioavg=$( awk 'BEGIN{printf "%.1f", '$ioall' / 3}' )
