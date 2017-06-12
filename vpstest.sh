@@ -219,7 +219,7 @@ mtrgo(){
 	echo "===== 测试 [$nodename] 到此服务器的去程路由 =====" | tee -a $logfile
 	mtrgostr=$(curl -s "$mtrurl")
 	echo -e "$mtrgostr" > mtrlog.log
-	mtrgostrback=$(curl -s -d @mtrlog.log "http://test.91yun.org/traceroute.php")
+	mtrgostrback=$(curl -s -d @mtrlog.log "https://test.91yun.org/traceroute.php")
 	rm -rf mtrlog.log
 	echo -e $mtrgostrback | awk -F '^' '{printf("%-2s\t%-16s\t%-35s\t%-30s\t%-25s\n",$1,$2,$3,$4,$5)}' | tee -a $logfile
 	echo -e "===== [$nodename] 去程路由测试结束 =====" | tee -a $logfile	
